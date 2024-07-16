@@ -1,0 +1,23 @@
+{
+  "name": "swidater",
+  "version": "1.0.0",
+  "description": "Extracting updates from Swift Docs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thebe001/Swidater.git"
+  },
+  "author": "Ahmed and Slim Frikha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thebe001/Swidater/issues"
+  },
+  "homepage": "https://github.com/Thebe001/Swidater#readme",
+  "devDependencies": {
+    "electron": "^31.2.1"
+  }
+}
