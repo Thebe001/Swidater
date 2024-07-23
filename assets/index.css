@@ -1,0 +1,38 @@
+/* styles.css */
+body {
+    background-color: #f0f0f0; /* Light gray background */
+    font-family: Arial, sans-serif; /* Choose a common system font for clarity */
+    padding: 20px; /* Add padding around the page content */
+  }
+  .container {
+    max-width: 600px; /* Limit maximum width for better readability */
+    margin: 0 auto; /* Center the container horizontally */
+    background-color: #ffffff; /* White background for form */
+    padding: 30px; /* Add padding inside the container */
+    border: 1px solid #e0e0e0; /* Light border around the container */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  }
+  .card-title {
+    font-size: 24px; /* Larger font size for titles */
+    font-weight: bold; /* Bold text for emphasis */
+    margin-bottom: 20px; /* Space below the title */
+  }
+  .form-group label {
+    font-weight: bold; /* Bold labels for clarity */
+  }
+  .form-check-label {
+    cursor: pointer; /* Pointer cursor for checkbox labels */
+  }
+  .btn-primary {
+    background-color: #007bff; /* Blue primary button color */
+    border-color: #007bff; /* Matching border color */
+  }
+  .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Matching border color */
+  }
+  #fileStatus {
+    margin-top: 20px; /* Space above file status message */
+  }
+  
