@@ -84,14 +84,16 @@ async function scrapePageParallel(browser, filePath) {
         name: result.name.trim(),
         type: "Insertion",
         content: insertion,
+        path: filePath // Add file path to each entry
       }));
     }
-    if (result.type === "deleted.gif") {
+    if (result.type.includes("deleted.gif")) {
       const deletions = await scrapeElement(page2, "del");
       data = deletions.map((deletion) => ({
         name: result.name.trim(),
         type: "Deletion",
         content: deletion,
+        path: filePath // Add file path to each entry
       }));
     }
 
@@ -119,11 +121,11 @@ async function scrapePageParallel(browser, filePath) {
       allResults.push(...results);
     });
 
-    // Sort results by name
-    allResults.sort((a, b) => a.name.localeCompare(b.name));
+    // Sort results by name and type
+    allResults.sort((a, b) => a.name.localeCompare(b.name) || a.type.localeCompare(b.type));
 
-    // Define the columns for CSV
-    const fields = ['name', 'type', 'content'];
+    // Define the columns for CSV including 'path'
+    const fields = ['name', 'type', 'content', 'path'];
     const json2csvParser = new Parser({ fields });
     const csvData = json2csvParser.parse(allResults);
 
