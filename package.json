@@ -22,6 +22,12 @@
     "puppeteer-cluster": "^0.24.0"
   },
   "dependencies": {
-    "adm-zip": "^0.5.14"
+    "adm-zip": "^0.5.14",
+    "csv-writer": "^1.6.0",
+    "fs": "^0.0.1-security",
+    "json2csv": "^6.0.0-alpha.2",
+    "path": "^0.12.7",
+    "puppeteer": "^22.14.0",
+    "xlsx": "^0.18.5"
   }
 }

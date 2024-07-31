@@ -1,12 +1,13 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
-const { Parser } = require("json2csv");
+const xlsx = require("xlsx");
 
+// Configuration des chemins
 const basePath = "C:/Users/slim/Downloads/srg2024";
 const booksPath = path.join(basePath, "books");
 
-// Function to get subdirectories within a directory
+// Fonction pour obtenir les sous-répertoires dans un répertoire
 function getSubDirectories(dirPath) {
   try {
     return fs
@@ -14,12 +15,12 @@ function getSubDirectories(dirPath) {
       .filter((item) => item.isDirectory())
       .map((item) => item.name);
   } catch (error) {
-    console.error("Error reading subdirectories:", error);
+    console.error("Erreur lors de la lecture des sous-répertoires :", error);
     return [];
   }
 }
 
-// Function to scrape data from a page
+// Fonction pour scraper les données d'une page
 async function scrapePage(page) {
   try {
     return await page.evaluate(() => {
@@ -33,28 +34,28 @@ async function scrapePage(page) {
         }));
     });
   } catch (error) {
-    console.error("Error scraping page:", error);
+    console.error("Erreur lors du scraping de la page :", error);
     return [];
   }
 }
 
-// Function to scrape specific elements from a page
+// Fonction pour scraper des éléments spécifiques d'une page
 async function scrapeElement(page, type) {
   try {
     return await page.evaluate((type) => {
       const elements = Array.from(document.querySelectorAll(type));
-      return elements.map((e) => e.innerText.trim()); // Trim to clean data
+      return elements.map((e) => e.innerText.trim()); // Nettoyer les données
     }, type);
   } catch (error) {
-    console.error(`Error scraping ${type}:`, error);
+    console.error(`Erreur lors du scraping de ${type} :`, error);
     return [];
   }
 }
 
-// Function to handle parallel scraping
+// Fonction pour gérer le scraping parallèle
 async function scrapePageParallel(browser, filePath) {
   if (!fs.existsSync(filePath)) {
-    console.error(`File not found: ${filePath}`);
+    console.error(`Fichier non trouvé : ${filePath}`);
     return [];
   }
 
@@ -84,7 +85,7 @@ async function scrapePageParallel(browser, filePath) {
         name: result.name.trim(),
         type: "Insertion",
         content: insertion,
-        path: filePath // Add file path to each entry
+        path: filePath // Ajouter le chemin du fichier à chaque entrée
       }));
     }
     if (result.type.includes("deleted.gif")) {
@@ -93,7 +94,7 @@ async function scrapePageParallel(browser, filePath) {
         name: result.name.trim(),
         type: "Deletion",
         content: deletion,
-        path: filePath // Add file path to each entry
+        path: filePath // Ajouter le chemin du fichier à chaque entrée
       }));
     }
 
@@ -121,21 +122,47 @@ async function scrapePageParallel(browser, filePath) {
       allResults.push(...results);
     });
 
-    // Sort results by name and type
-    allResults.sort((a, b) => a.name.localeCompare(b.name) || a.type.localeCompare(b.type));
+    // Trier les résultats par nom, type, contenu et chemin
+    allResults.sort((a, b) => {
+      // Trier par 'name' en premier
+      const nameComparison = a.name.localeCompare(b.name);
+      if (nameComparison !== 0) return nameComparison;
 
-    // Define the columns for CSV including 'path'
-    const fields = ['name', 'type', 'content', 'path'];
-    const json2csvParser = new Parser({ fields });
-    const csvData = json2csvParser.parse(allResults);
+      // Si les noms sont identiques, trier par 'type'
+      const typeComparison = a.type.localeCompare(b.type);
+      if (typeComparison !== 0) return typeComparison;
 
-    // Save to CSV file
-    const outputFilePath = path.join(__dirname, 'scraped_data.csv');
-    fs.writeFileSync(outputFilePath, csvData);
+      // Si les types sont identiques, trier par 'content'
+      const contentComparison = a.content.localeCompare(b.content);
+      if (contentComparison !== 0) return contentComparison;
 
-    console.log(`CSV file saved to ${outputFilePath}`);
+      // Si les contenus sont identiques, trier par 'path'
+      return a.path.localeCompare(b.path);
+    });
+
+    // Préparer les données pour Excel
+    const worksheetData = [
+      ['name', 'type', 'content', 'path'], // En-têtes
+      ...allResults.map(row => [row.name, row.type, row.content, row.path])
+    ];
+
+    // Créer un nouveau classeur
+    const workbook = xlsx.utils.book_new();
+    const worksheet = xlsx.utils.aoa_to_sheet(worksheetData);
+
+    // Ajouter la feuille de calcul au classeur
+    xlsx.utils.book_append_sheet(workbook, worksheet, 'Results');
+
+    // Spécifiez le chemin du fichier Excel
+    const outputPath = path.join(__dirname, 'results.xlsx');
+
+    // Écrire dans le fichier Excel
+    xlsx.writeFile(workbook, outputPath);
+
+    console.log(`Les résultats ont été écrits dans ${outputPath}`);
+
   } catch (error) {
-    console.error("Error scraping pages:", error);
+    console.error("Erreur lors du scraping des pages :", error);
   } finally {
     await browser.close();
   }
