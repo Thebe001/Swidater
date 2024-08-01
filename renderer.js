@@ -1,14 +1,11 @@
-// renderer.js
-const { sendExtractZipFile, onZipExtractionSuccess, onZipExtractionError } = window.electron;
-const { dialog } = require('electron').remote;
-const path = require('path');
-const fs = require('fs');
+const { sendExtractZipFile, onZipExtractionSuccess, onZipExtractionError, openDirectoryDialog } = window.electron;
 
-document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+let selectedExtractPath = ''; // Global variable to store the extraction path
+
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
   event.preventDefault();
 
   const zipFile = document.getElementById('zipFile').files[0];
-  const emptyFolder = document.getElementById('emptyFolder').checked;
   const folderName = document.getElementById('folderName').value.trim() || 'extracted';
 
   if (!zipFile) {
@@ -16,44 +13,18 @@ document.getElementById('uploadForm').addEventListener('submit', async function(
     return;
   }
 
-  // Verify if the selected file is a ZIP file
-  if (zipFile.name.slice(-4).toLowerCase() !== '.zip') {
-    alert('Please select a valid ZIP file.');
+  if (!selectedExtractPath) {
+    alert('Please select an extraction path.');
     return;
   }
 
-  const dialogOptions = {
-    title: 'Select Extraction Path',
-    properties: ['openDirectory']
-  };
 
-  dialog.showOpenDialog(dialogOptions).then(result => {
-    if (!result.canceled && result.filePaths.length > 0) {
-      const extractPath = result.filePaths[0];
 
-      sendExtractZipFile(zipFile.path);
+  // Redirect to loading page
+  window.location.href = 'loading.html';
 
-      onZipExtractionSuccess((htmlFilePath) => {
-        const targetFolder = path.join(extractPath, folderName);
-
-        if (emptyFolder && fs.existsSync(targetFolder)) {
-          fs.rmdirSync(targetFolder, { recursive: true });
-        }
-
-        fs.mkdirSync(targetFolder, { recursive: true });
-        const newWindow = window.open(htmlFilePath, 'Extracted HTML', 'width=800,height=600');
-        newWindow.onbeforeunload = () => {
-          // Implement cleanup logic if needed
-        };
-      });
-
-      onZipExtractionError((errorMessage) => {
-        alert(`Error extracting ZIP file: ${errorMessage}`);
-      });
-    }
-  }).catch(err => {
-    console.error('Error selecting directory:', err);
-  });
+  // Send a request to start the extraction process
+  sendExtractZipFile(zipFile.path, selectedExtractPath, folderName);
 });
 
 document.getElementById('zipFile').addEventListener('change', function() {
@@ -62,11 +33,21 @@ document.getElementById('zipFile').addEventListener('change', function() {
 });
 
 document.getElementById('choosePathBtn').addEventListener('click', function() {
-  dialog.showOpenDialog(dialogOptions).then(result => {
-    if (!result.canceled && result.filePaths.length > 0) {
-      document.getElementById('extractPath').value = result.filePaths[0];
+  openDirectoryDialog().then(result => {
+    if (result && result.length > 0) {
+      selectedExtractPath = result[0]; // Save the selected extraction path
+      document.getElementById('extractPath').value = selectedExtractPath;
     }
   }).catch(err => {
     console.error('Error selecting directory:', err);
   });
+});
+
+  onZipExtractionSuccess(() => {
+  window.location.href = 'download.html';
+});
+
+onZipExtractionError((errorMessage) => {
+  alert(`Error extracting ZIP file: ${errorMessage}`);
+  // Optionally, redirect or handle the error case
 });

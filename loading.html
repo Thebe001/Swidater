@@ -1,17 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
-    <link rel="stylesheet" href="assets/loading.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loading Page</title>
+
+    <!-- Bootstrap CSS (local) -->
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom CSS (local) -->
+    <link rel="stylesheet" href="assets/loading.css" />
+  </head>
+  <body>
+    <header class="bg-gradient text-white text-center py-5">
+      <div class="container">
+        <img src="assets/logo.png" alt="App Logo" class="logo mb-4" />
+        <h1 class="mb-3">Swidater</h1>
+        <p class="lead mb-4">Extracting your ZIP file...</p>
+      </div>
+    </header>
     <div class="loading-container">
-        <div class="loading-text">Extracting ZIP File</div>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
+      <div class="loading-text">Extracting ZIP File</div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
     </div>
-</body>
+    <footer class="footer bg-dark text-white py-5">
+      <div class="container text-center">
+        <h3 class="mb-4">About This App</h3>
+        <p>This application is designed to help keep track of the latest updates in the Swift Messages Documentation.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Simulate progress
+      let progress = 0;
+      const progressBar = document.querySelector('.progress-bar');
+      const interval = setInterval(() => {
+        progress += 10;
+        progressBar.style.width = `${progress}%`;
+        progressBar.setAttribute('aria-valuenow', progress);
+
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            window.location.href = 'download.html';
+          }, 500);
+        }
+      }, 500);
+    </script>
+  </body>
 </html>

@@ -81,11 +81,13 @@ async function scrapeElement(page, type) {
               console.log(`INSERTION ${i} \n ${insertion}\n`);
             }
           }
-          if (result.type == "deleted.gif") {
+          if (result.type.includes("deleted.gif")) {
             const deletions = await scrapeElement(page2, "del");
             for (const deletion of deletions) {
               console.log(`DELETION ${i} \n ${deletion}\n`);
             }
+          }
+          if (result.type.includes("updated.gif")) {
           }
 
           i++;

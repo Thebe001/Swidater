@@ -51,49 +51,20 @@ header p {
   font-size: 1.4rem;
   margin-bottom: 20px;
 }
-/* Container for loading screen */
-.loading-container {
+  .container {
+    margin-top: 50px;
     text-align: center;
-    background-color: #ffffff;
-    padding: 40px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 500px; /* Increased width */
-    margin: 50px auto; /* Centered with margin */
-}
-
-/* Loading text style */
-.loading-text {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-/* Progress container */
-.progress {
-    height: 25px;
-    margin-bottom: 20px;
-    overflow: hidden;
-    background-color: #e0e0e0;
-    border-radius: 8px;
-    position: relative;
-}
-
-/* Progress bar style */
-.progress-bar {
-    background-color: #28a745;
-    width: 0%;
-    height: 100%;
-    transition: width 0.5s ease;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-/* Footer styles */
+  }
+  
+  .btn-primary {
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  /* Footer styles */
 .footer {
     background: linear-gradient(to bottom, #343a40, #212529);
     color: #fff;
