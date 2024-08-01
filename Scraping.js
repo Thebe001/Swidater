@@ -304,6 +304,7 @@ async function scrapePageParallel(browser, filePath) {
     console.error("Erreur lors du scraping des pages :", error);
   } finally {
     await browser.close();
+    await browser.close();
   }
 })();
 

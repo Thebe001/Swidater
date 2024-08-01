@@ -1,69 +1,72 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const AdmZip = require('adm-zip');
-
+const { fork } = require('child_process');
+app.disableHardwareAcceleration();
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1000,
+    height: 600,
     resizable: true,
-    enableLargerThanScreen: true, // Enable larger than screen size
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
-      enableRemoteModule: false
+      enableRemoteModule: false,
+      nodeIntegration: false,
+      zoomFactor: 1.0
     }
   });
 
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.webContents.openDevTools();
 
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
 app.on('ready', createWindow);
 
-app.on('window-all-closed', function () {
+app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on('activate', function () {
+app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
 });
 
-ipcMain.on('extract-zip-file', async (event, filePath) => {
-  try {
-    const zip = new AdmZip(filePath);
-    const zipEntries = zip.getEntries();
-    let htmlFilePath = null;
+ipcMain.handle('openDirectoryDialog', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    title: 'Select Extraction Path',
+    properties: ['openDirectory']
+  });
+  return result.filePaths;
+});
 
-    for (let i = 0; i < zipEntries.length; i++) {
-      const zipEntry = zipEntries[i];
-      if (zipEntry.entryName.toLowerCase().includes('index.html')) {
-        console.log('Extracting', zipEntry.entryName);
-        const extractedPath = path.join(app.getPath('temp'), 'extracted');
-        fs.mkdirSync(extractedPath, { recursive: true });
-        zip.extractAllTo(extractedPath, true);
-        htmlFilePath = path.join(extractedPath, zipEntry.entryName);
-        break;
-      }
-    }
+ipcMain.on('extract-zip-file', (event, filePath, extractPath, folderName) => {
+  const extractScript = path.join(__dirname, 'extract.js');
 
-    if (htmlFilePath) {
-      event.reply('zip-extraction-success', htmlFilePath);
-    } else {
-      event.reply('zip-extraction-error', 'No index.html found in the ZIP file.');
+  const extractProcess = fork(extractScript, [filePath, extractPath, folderName]);
+
+  extractProcess.on('message', (message) => {
+    if (message.type === 'success') {
+      event.reply('zip-extraction-success');
+    } else if (message.type === 'error') {
+      event.reply('zip-extraction-error', message.message);
     }
-  } catch (error) {
-    event.reply('zip-extraction-error', error.message);
-  }
+  });
+
+  extractProcess.on('exit', (code) => {
+    if (code !== 0) {
+      event.reply('zip-extraction-error', 'Unknown error occurred during extraction.');
+    }
+  });
+
+  extractProcess.on('error', (error) => {
+    event.reply('zip-extraction-error', `Process error: ${error.message}`);
+  });
 });

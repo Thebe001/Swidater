@@ -1,38 +1,273 @@
-/* styles.css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Reset default margin and padding */
+body, h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Global typography */
 body {
-    background-color: #f0f0f0; /* Light gray background */
-    font-family: Arial, sans-serif; /* Choose a common system font for clarity */
-    padding: 20px; /* Add padding around the page content */
-  }
-  .container {
-    max-width: 600px; /* Limit maximum width for better readability */
-    margin: 0 auto; /* Center the container horizontally */
-    background-color: #ffffff; /* White background for form */
-    padding: 30px; /* Add padding inside the container */
-    border: 1px solid #e0e0e0; /* Light border around the container */
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
-  }
-  .card-title {
-    font-size: 24px; /* Larger font size for titles */
-    font-weight: bold; /* Bold text for emphasis */
-    margin-bottom: 20px; /* Space below the title */
-  }
-  .form-group label {
-    font-weight: bold; /* Bold labels for clarity */
-  }
-  .form-check-label {
-    cursor: pointer; /* Pointer cursor for checkbox labels */
-  }
-  .btn-primary {
-    background-color: #007bff; /* Blue primary button color */
-    border-color: #007bff; /* Matching border color */
-  }
-  .btn-primary:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    border-color: #0056b3; /* Matching border color */
-  }
-  #fileStatus {
-    margin-top: 20px; /* Space above file status message */
-  }
-  
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 1.8;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Header styles */
+header {
+  background: linear-gradient(to bottom, #343a40, #212529);
+  color: #fff;
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+header .logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.8rem;
+  margin-bottom: 15px;
+}
+
+header p {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+/* Main content styles */
+main {
+  padding: 0 20px;
+}
+/* Upload Section styles */
+.upload-section {
+  background: #f1f1f1;
+  padding: 60px 0;
+}
+
+.upload-section .container {
+  padding: 0 15px;
+}
+
+.upload-section .custom-card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 150%;
+}
+
+.upload-section .card-body {
+  padding: 30px;
+}
+
+.upload-section .card-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+.upload-section .form-group {
+  margin-bottom: 20px;
+}
+
+.upload-section .form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.upload-section .custom-file-input {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.upload-section .input-group {
+  display: flex;
+}
+
+.upload-section .input-group .custom-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  font-size: 16px;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+.upload-section .input-group .custom-button:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.upload-section .custom-submit-btn {
+  background: #007bff;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  color: #fff;
+  transition: background-color 0.3s, transform 0.2s;
+  cursor: pointer;
+}
+
+.upload-section .custom-submit-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.upload-section #fileStatus {
+  font-size: 1.25rem;
+  color: #6c757d;
+  margin-top: 20px;
+}
+
+/* History Section styles */
+.history-section {
+  background: #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 50px 25px;
+  width: 100%;
+}
+
+/* Info Section styles */
+.info-section {
+  background: linear-gradient(to right, #e9ecef, #ffffff, #e9ecef);
+  text-align: center;
+  padding: 50px 0;
+  width: 100%;
+}
+/* History Section styles */
+.history-section {
+  background: #e9ecef;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 50px 25px;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+.history-section h2 {
+  font-size: 3.25rem;
+  margin-bottom: 30px;
+}
+
+.history-section .list-group-item {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+
+}
+
+.history-section .list-group-item:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.3s;
+}
+
+.history-section .list-group-item h5 {
+  font-size: 1.5rem;
+  font-weight: 7500;
+  color: #495057;
+  margin-bottom: 6px;
+}
+
+.history-section .list-group-item small {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 6px;
+}
+
+.history-section .list-group-item p {
+  font-size: 1.25rem;
+  color: #495057;
+  margin-bottom: 0;
+}
+/* Info Section styles */
+.info-section {
+  background: linear-gradient(to right, #e9ecef, #ffffff, #e9ecef);
+  text-align: center;
+  padding: 50px 25px;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+.info-section h2 {
+  font-size: 3rem;
+  margin-bottom: 25px;
+}
+
+.info-section p {
+  font-size: 1.6rem;
+  margin-bottom: 25px;
+}
+
+.info-section ol {
+  font-size: 1.5rem;
+  margin: 0 auto;
+  max-width: 750px;
+  text-align: left;
+}
+
+/* Footer styles */
+.footer {
+  background: linear-gradient(to bottom, #343a40, #212529);
+  color: #fff;
+  text-align: center;
+  padding: 50px 25px;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+.footer h3 {
+  font-size: 2.25rem;
+  margin-bottom: 25px;
+}
+
+.footer p {
+  font-size: 1.4rem;
+  line-height: 2.5;
+  margin-bottom: 25px;
+}
