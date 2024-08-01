@@ -1,19 +1,20 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const { fork } = require('child_process');
-
+app.disableHardwareAcceleration();
 let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1000,
+    height: 600,
     resizable: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       enableRemoteModule: false,
       nodeIntegration: false,
+      zoomFactor: 1.0
     }
   });
 
@@ -51,15 +52,21 @@ ipcMain.on('extract-zip-file', (event, filePath, extractPath, folderName) => {
 
   const extractProcess = fork(extractScript, [filePath, extractPath, folderName]);
 
-  extractProcess.on('exit', (code) => {
-    if (code === 0) {
+  extractProcess.on('message', (message) => {
+    if (message.type === 'success') {
       event.reply('zip-extraction-success');
-    } else {
-      event.reply('zip-extraction-error', 'Extraction failed. Please check the console for details.');
+    } else if (message.type === 'error') {
+      event.reply('zip-extraction-error', message.message);
+    }
+  });
+
+  extractProcess.on('exit', (code) => {
+    if (code !== 0) {
+      event.reply('zip-extraction-error', 'Unknown error occurred during extraction.');
     }
   });
 
   extractProcess.on('error', (error) => {
-    event.reply('zip-extraction-error', error.message);
+    event.reply('zip-extraction-error', `Process error: ${error.message}`);
   });
 });

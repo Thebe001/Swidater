@@ -1,6 +1,6 @@
 const { sendExtractZipFile, onZipExtractionSuccess, onZipExtractionError, openDirectoryDialog } = window.electron;
 
-let selectedExtractPath = ''; // Global variable to store the extraction path
+let selectedExtractPath = '';
 
 document.getElementById('uploadForm').addEventListener('submit', function(event) {
   event.preventDefault();
@@ -18,8 +18,6 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     return;
   }
 
-
-
   // Redirect to loading page
   window.location.href = 'loading.html';
 
@@ -35,7 +33,7 @@ document.getElementById('zipFile').addEventListener('change', function() {
 document.getElementById('choosePathBtn').addEventListener('click', function() {
   openDirectoryDialog().then(result => {
     if (result && result.length > 0) {
-      selectedExtractPath = result[0]; // Save the selected extraction path
+      selectedExtractPath = result[0];
       document.getElementById('extractPath').value = selectedExtractPath;
     }
   }).catch(err => {
@@ -43,11 +41,12 @@ document.getElementById('choosePathBtn').addEventListener('click', function() {
   });
 });
 
-  onZipExtractionSuccess(() => {
+// These listeners should be active when loading.html is shown
+onZipExtractionSuccess(() => {
   window.location.href = 'download.html';
 });
 
 onZipExtractionError((errorMessage) => {
   alert(`Error extracting ZIP file: ${errorMessage}`);
-  // Optionally, redirect or handle the error case
+  window.location.href = 'index.html';  // Redirect back to the main page on error
 });
