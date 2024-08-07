@@ -271,3 +271,8 @@ main {
   line-height: 2.5;
   margin-bottom: 25px;
 }
+.warning{
+  color: rgb(175, 8, 8);
+  font-size: 1.5rem;
+  margin-top: 20px;
+}
